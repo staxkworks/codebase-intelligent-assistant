@@ -14,7 +14,14 @@ def count_lines(file_path: Path) -> int:
     """returns the number of lines that are in the given file."""
     return len(file_path.read_text(encoding="utf-8").splitlines())
 
+def scan_files(file_path:str) -> dict[str,str | int]:
+    "return a better formatted info about the file"
+    return {
+        "path": str(file_path),
+        "line_count": count_lines(file_path)
+    }
+
 if __name__ =="__main__":
     files=find_file_path("app")
     for file in files:
-        print(f"{file}:{count_lines(file)} lines")
+        print(scan_files(file))
