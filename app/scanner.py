@@ -18,10 +18,20 @@ def scan_files(file_path:str) -> dict[str,str | int]:
     "return a better formatted info about the file"
     return {
         "path": str(file_path),
-        "line_count": count_lines(file_path)
+        "line_count": count_lines(file_path),
+        "file_content": file_path.read_text(encoding="utf-8")
     }
+
+def chunk_text(content: str,chunk_size : int = 20) -> list[str]:
+    lines=content.splitlines()
+    return [
+        "/n".join(lines[start:start + chunk_size])
+        for start in range(0,len(lines),chunk_size)
+    ]
 
 if __name__ =="__main__":
     files=find_file_path("app")
     for file in files:
-        print(scan_files(file))
+        info= scan_files(file)
+        chunks=chunk_text(info['file_content'])
+        print(f"{info['path']}:{info['line_count']} lines and {len(chunks)} chunks")
